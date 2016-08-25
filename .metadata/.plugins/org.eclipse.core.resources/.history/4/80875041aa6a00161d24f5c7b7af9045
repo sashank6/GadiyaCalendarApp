@@ -1,0 +1,24 @@
+/**
+ * 
+ */
+package com.gadiyacalendar.ui;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+/**
+ * @author SashankAlladi
+ *
+ */
+public class UI extends JFrame {
+	
+	public UI(){
+		setLayout(null);
+		JLabel eventNameLabel=new JLabel();
+		eventNameLabel.setText("Event Name:");
+		eventNameLabel.setBounds(0,0,100,100);
+		add(eventNameLabel);
+		
+	}
+
+}

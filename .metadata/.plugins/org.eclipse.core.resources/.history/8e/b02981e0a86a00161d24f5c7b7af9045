@@ -1,0 +1,18 @@
+/**
+ * 
+ */
+package com.gadiyacalendar.ui;
+
+import javax.swing.JFrame;
+
+/**
+ * @author SashankAlladi
+ *
+ */
+public class UI extends JFrame {
+	
+	UI(){
+		
+	}
+
+}
