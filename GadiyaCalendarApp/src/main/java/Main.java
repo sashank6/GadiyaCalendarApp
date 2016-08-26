@@ -1,13 +1,8 @@
 import java.io.IOException;
-import java.util.List;
 
 import javax.swing.JFrame;
 
 import com.gadiyacalendar.ui.UI;
-import com.gadiyacalendarapp.core.Service;
-import com.google.api.client.util.DateTime;
-import com.google.api.services.calendar.model.Event;
-import com.google.api.services.calendar.model.Events;
 public class Main {
 
 	/**

@@ -23,7 +23,7 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
-import com.gadiyacalendarapp.core.Service;
+import com.gadiyacalendar.core.Service;
 import com.google.api.services.calendar.model.Event;
 
 /**

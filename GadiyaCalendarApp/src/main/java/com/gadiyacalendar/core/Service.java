@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.gadiyacalendarapp.core;
+package com.gadiyacalendar.core;
 
 import java.io.IOException;
 import java.io.InputStream;
