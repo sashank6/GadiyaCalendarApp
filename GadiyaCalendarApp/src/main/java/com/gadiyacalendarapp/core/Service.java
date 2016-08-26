@@ -65,7 +65,7 @@ public class Service {
 				.setApplicationName(APPLICATION_NAME).build();
 	}
 	
-	public static void addEvent(String eventname,String location,String description,long start_time,double gadiyas) throws IOException{
+	public static Event addEvent(String eventname,String location,String description,long start_time,double gadiyas) throws IOException{
 		Event event=new Event();
 		event.setSummary(eventname);
 		event.setLocation(location);
@@ -84,7 +84,7 @@ public class Service {
 		event.setEnd(end);
 		
 		event=new Service().getCalendarService().events().insert("primary", event).execute();
-		System.out.println("Event Created "+event.getHtmlLink());
+		return event;
 	}
 
 }

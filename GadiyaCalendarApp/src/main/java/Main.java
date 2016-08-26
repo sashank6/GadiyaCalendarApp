@@ -16,9 +16,7 @@ public class Main {
 	 */
 	public static void main(String[] args) throws IOException {
 
-		Service service=new Service();
-		com.google.api.services.calendar.Calendar calservice = service.getCalendarService();
-//		service.addEvent("TestEvent", "Hyderabad", "Test", System.currentTimeMillis(), 3);
+		
 		UI ui=new UI();
 		ui.setTitle("Gadiya Calendar");
 		ui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

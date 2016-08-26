@@ -5,8 +5,7 @@ package com.gadiyacalendar.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +23,9 @@ import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
+import com.gadiyacalendarapp.core.Service;
+import com.google.api.services.calendar.model.Event;
+
 /**
  * @author SashankAlladi
  *
@@ -36,7 +38,7 @@ public class UI extends JFrame implements ActionListener {
 	JTextField eventLocationField;
 	JLabel eventDescriptionLabel;
 	JTextField eventDescriptionField, eventGadiyasField;
-	JLabel eventStartdateLabel, eventGadiyasLabel;
+	JLabel eventStartdateLabel, eventGadiyasLabel, resultLabel;
 	JDatePickerImpl datePicker;
 	JComboBox minutesBox, meridianBox, hoursBox;
 	JButton addButton, clearButton, cancelButton;
@@ -77,12 +79,12 @@ public class UI extends JFrame implements ActionListener {
 		datePicker = new JDatePickerImpl(datePanel, new DateFormatter());
 		datePicker.setBounds(110, 100, 150, 20);
 		add(datePicker);
-		Vector<String> hours = this.getStringNumbers(12,1);
+		Vector<String> hours = this.getStringNumbers(12, 1);
 		hoursBox = new JComboBox(hours);
 		hoursBox.setBounds(260, 100, 70, 20);
 		hoursBox.setSelectedIndex(0);
 		add(hoursBox);
-		minutesBox = new JComboBox(this.getStringNumbers(60,0));
+		minutesBox = new JComboBox(this.getStringNumbers(60, 0));
 		minutesBox.setBounds(330, 100, 70, 20);
 		minutesBox.setSelectedIndex(0);
 		add(minutesBox);
@@ -109,9 +111,12 @@ public class UI extends JFrame implements ActionListener {
 		addButton.addActionListener(this);
 		clearButton.addActionListener(this);
 		cancelButton.addActionListener(this);
+		resultLabel = new JLabel();
+		resultLabel.setBounds(40, 220, 400, 20);
+		add(resultLabel);
 	}
 
-	public Vector<String> getStringNumbers(int limit,int start) {
+	public Vector<String> getStringNumbers(int limit, int start) {
 		Vector<String> data = new Vector<String>();
 		data.add("--");
 		for (int i = start; i <= limit; i++) {
@@ -123,13 +128,14 @@ public class UI extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		resultLabel.setText("Processing...");
 		boolean isValid = true;
 		if (e.getSource() == addButton && isValid) {
 			String eventName = eventNameField.getText();
 			String eventLocation = eventLocationField.getText();
 			String eventDescription = eventDescriptionField.getText();
 			long gadiyas = Long.parseLong(eventGadiyasField.getText());
-			DateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd");
+			DateFormat dateformat = new SimpleDateFormat("yyyy-MM-dd");
 			Date selectedDate = null;
 			try {
 				selectedDate = dateformat.parse(datePicker.getJFormattedTextField().getText());
@@ -139,16 +145,24 @@ public class UI extends JFrame implements ActionListener {
 			}
 			System.out.println(selectedDate.getTime());
 			long start_time = selectedDate.getTime() + this.getTime();
-			System.out.println(
-					eventName + " " + eventLocation + " " + eventDescription + " " + gadiyas + " " + start_time+" "+System.currentTimeMillis());
-
+			Service service = new Service();
+			com.google.api.services.calendar.Calendar calservice;
+			Event calEvent;
+			try {
+				calservice = service.getCalendarService();
+				calEvent = Service.addEvent(eventName, eventLocation, eventDescription, start_time, gadiyas);
+				resultLabel.setText("Event Added Successfully at " + calEvent.getHtmlLink());
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
 	}
 
 	public long getTime() {
 		long time = (meridianBox.getSelectedIndex() == 2) ? 12 * 60 * 60 * 1000 : 0;
-		time += minutesBox.getSelectedIndex() * 60 * 1000;
+		time += (minutesBox.getSelectedIndex() - 1) * 60 * 1000;
 		time += (hoursBox.getSelectedIndex() == 12) ? 0 : hoursBox.getSelectedIndex() * 60 * 60 * 1000;
 		return time;
 	}
