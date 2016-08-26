@@ -1,0 +1,158 @@
+/**
+ * 
+ */
+package com.gadiyacalendar.ui;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Date;
+import java.util.Properties;
+import java.util.Vector;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
+/**
+ * @author SashankAlladi
+ *
+ */
+public class UI extends JFrame implements ActionListener, ItemListener {
+
+	JLabel eventNameLabel;
+	JTextField eventNameField;
+	JLabel eventLocationLabel;
+	JTextField eventLocationField;
+	JLabel eventDescriptionLabel;
+	JTextField eventDescriptionField,eventGadiyasField;
+	JLabel eventStartdateLabel,eventGadiyasLabel;
+	JDatePickerImpl datePicker;
+	JComboBox minutesBox, meridianBox,hoursBox;
+	JButton addButton, clearButton, cancelButton;
+
+	public UI() {
+		setLayout(null);
+		eventNameLabel = new JLabel();
+		eventNameLabel.setText("Event Name:");
+		eventNameLabel.setBounds(10, 10, 100, 20);
+		add(eventNameLabel);
+		eventNameField = new JTextField();
+		eventNameField.setBounds(110, 10, 150, 20);
+		add(eventNameField);
+		eventLocationLabel = new JLabel();
+		eventLocationLabel.setText("Location:");
+		eventLocationLabel.setBounds(10, 40, 100, 20);
+		add(eventLocationLabel);
+		eventLocationField = new JTextField();
+		eventLocationField.setBounds(110, 40, 150, 20);
+		add(eventLocationField);
+		eventDescriptionLabel = new JLabel();
+		eventDescriptionLabel.setText("Description:");
+		eventDescriptionLabel.setBounds(10, 70, 100, 20);
+		add(eventDescriptionLabel);
+		eventDescriptionField = new JTextField();
+		eventDescriptionField.setBounds(110, 70, 150, 20);
+		add(eventDescriptionField);
+		eventStartdateLabel = new JLabel();
+		eventStartdateLabel.setText("Start Date:");
+		eventStartdateLabel.setBounds(10, 100, 100, 20);
+		add(eventStartdateLabel);
+		UtilDateModel model = new UtilDateModel();
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+		datePicker = new JDatePickerImpl(datePanel, new DateFormatter());
+		datePicker.setBounds(110, 100, 150, 20);
+		add(datePicker);
+		Vector<String> hours = this.getStringNumbers(12);
+		hoursBox = new JComboBox(hours);
+		hoursBox.setBounds(260, 100, 70, 20);
+		hoursBox.setSelectedIndex(0);
+		hoursBox.addItemListener(this);
+		add(hoursBox);
+		minutesBox = new JComboBox(this.getStringNumbers(60));
+		minutesBox.setBounds(340, 100, 60, 20);
+		minutesBox.setSelectedIndex(0);
+		minutesBox.addItemListener(this);
+		add(minutesBox);
+		String[] meridians = { "--", "AM", "PM" };
+		meridianBox = new JComboBox(meridians);
+		meridianBox.setBounds(400, 100, 60, 20);
+		meridianBox.addItemListener(this);
+		add(meridianBox);
+		eventGadiyasLabel = new JLabel();
+		eventGadiyasLabel.setText("Gadiyas:");
+		eventGadiyasLabel.setBounds(10, 130, 100, 20);
+		add(eventGadiyasLabel);
+		eventGadiyasField = new JTextField();
+		eventGadiyasField.setBounds(110, 130, 150, 20);
+		add(eventGadiyasField);
+		addButton = new JButton("Add");
+		clearButton = new JButton("Clear");
+		cancelButton = new JButton("Cancel");
+		addButton.setBounds(40, 180, 50, 20);
+		clearButton.setBounds(100, 180, 50, 20);
+		cancelButton.setBounds(160, 180, 50, 20);
+		add(addButton);
+		add(clearButton);
+		add(cancelButton);
+		addButton.addActionListener(this);
+		clearButton.addActionListener(this);
+		cancelButton.addActionListener(this);
+	}
+
+	public Vector<String> getStringNumbers(int limit) {
+		Vector<String> data = new Vector<String>();
+		data.add("--");
+		for (int i = 1; i <= limit; i++) {
+			data.add(i < 10 ? "0" + String.valueOf(i) : String.valueOf(i));
+		}
+		return data;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		boolean isValid=true;
+		if(e.getSource()==addButton && isValid){
+			String eventName=eventNameField.getText();
+			String eventLocation=eventLocationField.getText();
+			String eventDescription=eventDescriptionField.getText();
+			long gadiyas=Long.parseLong(eventGadiyasField.getText());
+			Date selectedDate=(Date)datePicker.getModel().getValue();
+			long start_time=selectedDate.getTime();
+			
+			System.out.println(eventName+" "+eventLocation+" "+eventDescription+" "+gadiyas+" "+start_time);
+			
+			
+			
+		}
+		
+		
+		
+		
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		
+//		if(e.getSource()==hoursBox){
+//			long k=hoursBox.getSelectedIndex();
+//			System.out.println(k);
+//			hoursBox.setSelectedIndex((int) k);
+//		}
+		
+	}
+
+}

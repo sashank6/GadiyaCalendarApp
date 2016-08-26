@@ -3,6 +3,14 @@
  */
 package com.gadiyacalendar.ui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -20,32 +28,43 @@ import org.jdatepicker.impl.UtilDateModel;
  * @author SashankAlladi
  *
  */
-public class UI extends JFrame {
+public class UI extends JFrame implements ActionListener {
+
+	JLabel eventNameLabel;
+	JTextField eventNameField;
+	JLabel eventLocationLabel;
+	JTextField eventLocationField;
+	JLabel eventDescriptionLabel;
+	JTextField eventDescriptionField, eventGadiyasField;
+	JLabel eventStartdateLabel, eventGadiyasLabel;
+	JDatePickerImpl datePicker;
+	JComboBox minutesBox, meridianBox, hoursBox;
+	JButton addButton, clearButton, cancelButton;
 
 	public UI() {
 		setLayout(null);
-		JLabel eventNameLabel = new JLabel();
+		eventNameLabel = new JLabel();
 		eventNameLabel.setText("Event Name:");
 		eventNameLabel.setBounds(10, 10, 100, 20);
 		add(eventNameLabel);
-		JTextField eventNameField = new JTextField();
+		eventNameField = new JTextField();
 		eventNameField.setBounds(110, 10, 150, 20);
 		add(eventNameField);
-		JLabel eventLocationLabel = new JLabel();
+		eventLocationLabel = new JLabel();
 		eventLocationLabel.setText("Location:");
 		eventLocationLabel.setBounds(10, 40, 100, 20);
 		add(eventLocationLabel);
-		JTextField eventLocationField = new JTextField();
+		eventLocationField = new JTextField();
 		eventLocationField.setBounds(110, 40, 150, 20);
 		add(eventLocationField);
-		JLabel eventDescriptionLabel = new JLabel();
+		eventDescriptionLabel = new JLabel();
 		eventDescriptionLabel.setText("Description:");
 		eventDescriptionLabel.setBounds(10, 70, 100, 20);
 		add(eventDescriptionLabel);
-		JTextField eventDescriptionField = new JTextField();
+		eventDescriptionField = new JTextField();
 		eventDescriptionField.setBounds(110, 70, 150, 20);
 		add(eventDescriptionField);
-		JLabel eventStartdateLabel = new JLabel();
+		eventStartdateLabel = new JLabel();
 		eventStartdateLabel.setText("Start Date:");
 		eventStartdateLabel.setBounds(10, 100, 100, 20);
 		add(eventStartdateLabel);
@@ -55,48 +74,83 @@ public class UI extends JFrame {
 		p.put("text.month", "Month");
 		p.put("text.year", "Year");
 		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
-		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateFormatter());
+		datePicker = new JDatePickerImpl(datePanel, new DateFormatter());
 		datePicker.setBounds(110, 100, 150, 20);
 		add(datePicker);
-		Vector<String> hours = this.getStringNumbers(12);
-		JComboBox hoursBox = new JComboBox(hours);
-		hoursBox.setBounds(260,100,60,20);
+		Vector<String> hours = this.getStringNumbers(12,1);
+		hoursBox = new JComboBox(hours);
+		hoursBox.setBounds(260, 100, 70, 20);
 		hoursBox.setSelectedIndex(0);
 		add(hoursBox);
-		JComboBox minutesBox = new JComboBox(this.getStringNumbers(60));
-		minutesBox.setBounds(320,100,60,20);
+		minutesBox = new JComboBox(this.getStringNumbers(60,0));
+		minutesBox.setBounds(330, 100, 70, 20);
 		minutesBox.setSelectedIndex(0);
 		add(minutesBox);
-		String[] meridians={"--","AM","PM"};
-		JComboBox meridianBox=new JComboBox(meridians);
-		meridianBox.setBounds(380,100,60,20);
+		String[] meridians = { "--", "AM", "PM" };
+		meridianBox = new JComboBox(meridians);
+		meridianBox.setBounds(400, 100, 70, 20);
 		add(meridianBox);
-		JLabel eventGadiyasLabel = new JLabel();
+		eventGadiyasLabel = new JLabel();
 		eventGadiyasLabel.setText("Gadiyas:");
 		eventGadiyasLabel.setBounds(10, 130, 100, 20);
 		add(eventGadiyasLabel);
-		JTextField eventGadiyasField = new JTextField();
+		eventGadiyasField = new JTextField();
 		eventGadiyasField.setBounds(110, 130, 150, 20);
 		add(eventGadiyasField);
-		JButton addButton = new JButton("Add");
-		JButton clearButton = new JButton("Clear");
-		JButton cancelButton = new JButton("Cancel");
+		addButton = new JButton("Add");
+		clearButton = new JButton("Clear");
+		cancelButton = new JButton("Cancel");
 		addButton.setBounds(40, 180, 50, 20);
 		clearButton.setBounds(100, 180, 50, 20);
 		cancelButton.setBounds(160, 180, 50, 20);
 		add(addButton);
 		add(clearButton);
 		add(cancelButton);
-
+		addButton.addActionListener(this);
+		clearButton.addActionListener(this);
+		cancelButton.addActionListener(this);
 	}
 
-	public Vector<String> getStringNumbers(int limit) {
+	public Vector<String> getStringNumbers(int limit,int start) {
 		Vector<String> data = new Vector<String>();
 		data.add("--");
-		for (int i = 1; i <= limit; i++) {
+		for (int i = start; i <= limit; i++) {
 			data.add(i < 10 ? "0" + String.valueOf(i) : String.valueOf(i));
 		}
 		return data;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		boolean isValid = true;
+		if (e.getSource() == addButton && isValid) {
+			String eventName = eventNameField.getText();
+			String eventLocation = eventLocationField.getText();
+			String eventDescription = eventDescriptionField.getText();
+			long gadiyas = Long.parseLong(eventGadiyasField.getText());
+			DateFormat dateformat=new SimpleDateFormat("yyyy-MM-dd");
+			Date selectedDate = null;
+			try {
+				selectedDate = dateformat.parse(datePicker.getJFormattedTextField().getText());
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			System.out.println(selectedDate.getTime());
+			long start_time = selectedDate.getTime() + this.getTime();
+			System.out.println(
+					eventName + " " + eventLocation + " " + eventDescription + " " + gadiyas + " " + start_time+" "+System.currentTimeMillis());
+
+		}
+
+	}
+
+	public long getTime() {
+		long time = (meridianBox.getSelectedIndex() == 2) ? 12 * 60 * 60 * 1000 : 0;
+		time += minutesBox.getSelectedIndex() * 60 * 1000;
+		time += (hoursBox.getSelectedIndex() == 12) ? 0 : hoursBox.getSelectedIndex() * 60 * 60 * 1000;
+		return time;
 	}
 
 }
