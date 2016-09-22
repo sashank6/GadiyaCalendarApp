@@ -43,6 +43,7 @@ public class UI extends JFrame implements ActionListener {
 	JComboBox minutesBox, meridianBox, hoursBox;
 	JButton addButton, clearButton, cancelButton;
 
+	//Builds the UI
 	public UI() {
 		setLayout(null);
 		eventNameLabel = new JLabel();
@@ -124,7 +125,8 @@ public class UI extends JFrame implements ActionListener {
 		}
 		return data;
 	}
-
+	
+	//Event handler for add button
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
