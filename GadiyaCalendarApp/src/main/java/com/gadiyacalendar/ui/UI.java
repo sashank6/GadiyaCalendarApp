@@ -129,7 +129,6 @@ public class UI extends JFrame implements ActionListener {
 	//Event handler for add button
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		resultLabel.setText("Processing...");
 		boolean isValid = true;
 		if (e.getSource() == addButton && isValid) {
@@ -142,7 +141,6 @@ public class UI extends JFrame implements ActionListener {
 			try {
 				selectedDate = dateformat.parse(datePicker.getJFormattedTextField().getText());
 			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			System.out.println(selectedDate.getTime());
@@ -155,7 +153,6 @@ public class UI extends JFrame implements ActionListener {
 				calEvent = Service.addEvent(eventName, eventLocation, eventDescription, start_time, gadiyas);
 				resultLabel.setText("Event Added Successfully at " + calEvent.getHtmlLink());
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
